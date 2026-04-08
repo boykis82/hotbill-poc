@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.billing.hotbill.api.HotbillTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-03-10T07:10:19.674Z" hostname="SKAXui-MacBookPro.local" time="0.035">
+  <properties/>
+  <testcase name="requestHotbill_메서드_시그니처가_올바른지_확인()" classname="com.billing.hotbill.api.HotbillTest" time="0.017"/>
+  <testcase name="requestSettlement_메서드_시그니처가_올바른지_확인()" classname="com.billing.hotbill.api.HotbillTest" time="0.0"/>
+  <testcase name="queryHotbillResult_메서드_시그니처가_올바른지_확인()" classname="com.billing.hotbill.api.HotbillTest" time="0.0"/>
+  <testcase name="Hotbill_인터페이스는_4개의_메서드를_가져야_한다()" classname="com.billing.hotbill.api.HotbillTest" time="0.001"/>
+  <testcase name="cancelSettlement_메서드_시그니처가_올바른지_확인()" classname="com.billing.hotbill.api.HotbillTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

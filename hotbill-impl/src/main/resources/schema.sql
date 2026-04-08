@@ -1,0 +1,86 @@
+-- Hotbill 모듈 데이터베이스 스키마
+-- Oracle Database
+
+-- 1. 핫빌 진행상태 테이블
+CREATE TABLE TB_HOTBILL_STATUS (
+    CONTRACT_NUMBER     VARCHAR2(20)    NOT NULL,   -- 계약번호
+    HOTBILL_DATE        DATE            NOT NULL,   -- Hotbill일자
+    USECASE             VARCHAR2(20)    NOT NULL,   -- Usecase 코드
+    STATUS              VARCHAR2(20)    NOT NULL,   -- 진행상태
+    REQUEST_DATETIME    TIMESTAMP       NOT NULL,   -- 요청일시
+    UPDATE_DATETIME     TIMESTAMP       NOT NULL,   -- 갱신일시
+    ERROR_MESSAGE       VARCHAR2(500),              -- 오류메시지
+    CONSTRAINT PK_HOTBILL_STATUS PRIMARY KEY (CONTRACT_NUMBER, HOTBILL_DATE)
+);
+
+-- 2. 과금자료 테이블
+CREATE TABLE TB_CHARGE_DATA (
+    CONTRACT_NUMBER     VARCHAR2(20)    NOT NULL,   -- 계약번호
+    HOTBILL_DATE        DATE            NOT NULL,   -- Hotbill일자
+    CHARGE_CODE         VARCHAR2(20)    NOT NULL,   -- 과금항목코드
+    AMOUNT              NUMBER(15,2)    NOT NULL,   -- 청구금액
+    ERROR_CODE          VARCHAR2(20),               -- 오류코드
+    ERROR_MESSAGE       VARCHAR2(500),              -- 오류메시지
+    CREATE_DATETIME     TIMESTAMP       NOT NULL,   -- 생성일시
+    CONSTRAINT PK_CHARGE_DATA PRIMARY KEY (CONTRACT_NUMBER, HOTBILL_DATE, CHARGE_CODE)
+);
+
+-- 3. 핫빌청구정보 테이블
+CREATE TABLE TB_HOTBILL_BILLING_INFO (
+    CONTRACT_NUMBER     VARCHAR2(20)    NOT NULL,   -- 계약번호
+    HOTBILL_DATE        DATE            NOT NULL,   -- Hotbill일자
+    SEQ_NO              NUMBER(5)       NOT NULL,   -- 일련번호
+    CHARGE_CODE         VARCHAR2(20)    NOT NULL,   -- 과금항목코드
+    AMOUNT              NUMBER(15,2)    NOT NULL,   -- 청구금액
+    SETTLEMENT_YN       CHAR(1)         DEFAULT 'N',-- 해지정산여부
+    CREATE_DATETIME     TIMESTAMP       NOT NULL,   -- 생성일시
+    UPDATE_DATETIME     TIMESTAMP       NOT NULL,   -- 갱신일시
+    CONSTRAINT PK_HOTBILL_BILLING_INFO PRIMARY KEY (CONTRACT_NUMBER, HOTBILL_DATE, SEQ_NO)
+);
+
+-- 4. 청구정보 테이블
+CREATE TABLE TB_BILLING_INFO (
+    CONTRACT_NUMBER     VARCHAR2(20)    NOT NULL,   -- 계약번호
+    BILLING_MONTH       CHAR(6)         NOT NULL,   -- 청구년월
+    SEQ_NO              NUMBER(5)       NOT NULL,   -- 일련번호
+    CHARGE_CODE         VARCHAR2(20)    NOT NULL,   -- 과금항목코드
+    AMOUNT              NUMBER(15,2)    NOT NULL,   -- 청구금액
+    HOTBILL_YN          CHAR(1)         DEFAULT 'N',-- Hotbill여부
+    CREATE_DATETIME     TIMESTAMP       NOT NULL,   -- 생성일시
+    CONSTRAINT PK_BILLING_INFO PRIMARY KEY (CONTRACT_NUMBER, BILLING_MONTH, SEQ_NO)
+);
+
+-- 5. 포스팅이력 테이블
+CREATE TABLE TB_POSTING_HISTORY (
+    CONTRACT_NUMBER     VARCHAR2(20)    NOT NULL,   -- 계약번호
+    HOTBILL_DATE        DATE            NOT NULL,   -- Hotbill일자
+    SEQ_NO              NUMBER(5)       NOT NULL,   -- 일련번호
+    POSTING_DATA        CLOB            NOT NULL,   -- 포스팅데이터 (JSON)
+    CREATE_DATETIME     TIMESTAMP       NOT NULL,   -- 생성일시
+    CONSTRAINT PK_POSTING_HISTORY PRIMARY KEY (CONTRACT_NUMBER, HOTBILL_DATE, SEQ_NO)
+);
+
+-- 6. 핫빌취소로그 테이블
+CREATE TABLE TB_CANCELLATION_LOG (
+    CONTRACT_NUMBER     VARCHAR2(20)    NOT NULL,   -- 계약번호
+    HOTBILL_DATE        DATE            NOT NULL,   -- Hotbill일자
+    SEQ_NO              NUMBER(5)       NOT NULL,   -- 일련번호
+    TABLE_NAME          VARCHAR2(50)    NOT NULL,   -- 대상테이블명
+    SNAPSHOT_DATA       CLOB            NOT NULL,   -- 변경 전 스냅샷 (JSON)
+    CREATE_DATETIME     TIMESTAMP       NOT NULL,   -- 생성일시
+    CONSTRAINT PK_CANCELLATION_LOG PRIMARY KEY (CONTRACT_NUMBER, HOTBILL_DATE, SEQ_NO)
+);
+
+-- 인덱스 생성
+CREATE INDEX IDX_HOTBILL_STATUS_STATUS ON TB_HOTBILL_STATUS(STATUS);
+CREATE INDEX IDX_CHARGE_DATA_CONTRACT ON TB_CHARGE_DATA(CONTRACT_NUMBER, HOTBILL_DATE);
+CREATE INDEX IDX_HOTBILL_BILLING_SETTLEMENT ON TB_HOTBILL_BILLING_INFO(SETTLEMENT_YN);
+CREATE INDEX IDX_BILLING_INFO_HOTBILL ON TB_BILLING_INFO(HOTBILL_YN);
+
+-- 코멘트 추가
+COMMENT ON TABLE TB_HOTBILL_STATUS IS '핫빌 진행상태 관리 테이블';
+COMMENT ON TABLE TB_CHARGE_DATA IS '외부 시스템으로부터 수신한 과금자료 저장 테이블';
+COMMENT ON TABLE TB_HOTBILL_BILLING_INFO IS '핫빌 청구정보 임시 저장 테이블';
+COMMENT ON TABLE TB_BILLING_INFO IS '본 청구정보 테이블 (청구서, 수납 처리용)';
+COMMENT ON TABLE TB_POSTING_HISTORY IS '해지정산 시 업무 테이블 갱신 이력';
+COMMENT ON TABLE TB_CANCELLATION_LOG IS '해지정산 당일취소를 위한 변경 전 스냅샷';

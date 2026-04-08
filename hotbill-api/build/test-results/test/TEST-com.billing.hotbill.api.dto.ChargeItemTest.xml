@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.billing.hotbill.api.dto.ChargeItemTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-03-10T07:10:19.739Z" hostname="SKAXui-MacBookPro.local" time="0.006">
+  <properties/>
+  <testcase name="과금항목_객체생성_테스트()" classname="com.billing.hotbill.api.dto.ChargeItemTest" time="0.001"/>
+  <testcase name="과금항목_필드가_null이면_안됨()" classname="com.billing.hotbill.api.dto.ChargeItemTest" time="0.002"/>
+  <testcase name="과금금액은_음수가_될_수_없음()" classname="com.billing.hotbill.api.dto.ChargeItemTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

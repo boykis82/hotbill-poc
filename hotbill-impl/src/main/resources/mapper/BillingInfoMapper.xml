@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.billing.hotbill.impl.mapper.BillingInfoMapper">
+
+    <resultMap id="HotbillBillingInfoResultMap" type="com.billing.hotbill.impl.entity.HotbillBillingInfoEntity">
+        <id property="contractNumber" column="CONTRACT_NUMBER"/>
+        <id property="hotbillDate" column="HOTBILL_DATE"/>
+        <id property="seqNo" column="SEQ_NO"/>
+        <result property="chargeCode" column="CHARGE_CODE"/>
+        <result property="amount" column="AMOUNT"/>
+        <result property="settlementYn" column="SETTLEMENT_YN"/>
+        <result property="createDatetime" column="CREATE_DATETIME"/>
+        <result property="updateDatetime" column="UPDATE_DATETIME"/>
+    </resultMap>
+
+    <resultMap id="BillingInfoResultMap" type="com.billing.hotbill.impl.entity.BillingInfoEntity">
+        <id property="contractNumber" column="CONTRACT_NUMBER"/>
+        <id property="billingMonth" column="BILLING_MONTH"/>
+        <id property="seqNo" column="SEQ_NO"/>
+        <result property="chargeCode" column="CHARGE_CODE"/>
+        <result property="amount" column="AMOUNT"/>
+        <result property="hotbillYn" column="HOTBILL_YN"/>
+        <result property="createDatetime" column="CREATE_DATETIME"/>
+    </resultMap>
+
+    <insert id="insertHotbillBillingInfo" parameterType="com.billing.hotbill.impl.entity.HotbillBillingInfoEntity">
+        INSERT INTO TB_HOTBILL_BILLING_INFO (
+            CONTRACT_NUMBER,
+            HOTBILL_DATE,
+            SEQ_NO,
+            CHARGE_CODE,
+            AMOUNT,
+            SETTLEMENT_YN,
+            CREATE_DATETIME,
+            UPDATE_DATETIME
+        ) VALUES (
+            #{contractNumber},
+            #{hotbillDate},
+            #{seqNo},
+            #{chargeCode},
+            #{amount},
+            #{settlementYn},
+            #{createDatetime},
+            #{updateDatetime}
+        )
+    </insert>
+
+    <select id="selectHotbillBillingInfo" resultMap="HotbillBillingInfoResultMap">
+        SELECT CONTRACT_NUMBER,
+               HOTBILL_DATE,
+               SEQ_NO,
+               CHARGE_CODE,
+               AMOUNT,
+               SETTLEMENT_YN,
+               CREATE_DATETIME,
+               UPDATE_DATETIME
+        FROM TB_HOTBILL_BILLING_INFO
+        WHERE CONTRACT_NUMBER = #{contractNumber}
+          AND HOTBILL_DATE = #{hotbillDate}
+        ORDER BY SEQ_NO
+    </select>
+
+    <update id="updateSettlementYn">
+        UPDATE TB_HOTBILL_BILLING_INFO
+        SET SETTLEMENT_YN = #{settlementYn},
+            UPDATE_DATETIME = CURRENT_TIMESTAMP
+        WHERE HOTBILL_DATE = #{hotbillDate}
+          AND CONTRACT_NUMBER IN
+        <foreach collection="contractNumbers" item="contractNumber" open="(" separator="," close=")">
+            #{contractNumber}
+        </foreach>
+    </update>
+
+    <insert id="insertBillingInfo" parameterType="com.billing.hotbill.impl.entity.BillingInfoEntity">
+        INSERT INTO TB_BILLING_INFO (
+            CONTRACT_NUMBER,
+            BILLING_MONTH,
+            SEQ_NO,
+            CHARGE_CODE,
+            AMOUNT,
+            HOTBILL_YN,
+            CREATE_DATETIME
+        ) VALUES (
+            #{contractNumber},
+            #{billingMonth},
+            #{seqNo},
+            #{chargeCode},
+            #{amount},
+            #{hotbillYn},
+            #{createDatetime}
+        )
+    </insert>
+
+    <delete id="deleteHotbillData">
+        DELETE FROM TB_BILLING_INFO
+        WHERE BILLING_MONTH = #{billingMonth}
+          AND HOTBILL_YN = 'Y'
+          AND CONTRACT_NUMBER IN
+        <foreach collection="contractNumbers" item="contractNumber" open="(" separator="," close=")">
+            #{contractNumber}
+        </foreach>
+    </delete>
+
+    <select id="selectBillingInfoByContract" resultMap="BillingInfoResultMap">
+        SELECT CONTRACT_NUMBER,
+               BILLING_MONTH,
+               SEQ_NO,
+               CHARGE_CODE,
+               AMOUNT,
+               HOTBILL_YN,
+               CREATE_DATETIME
+        FROM TB_BILLING_INFO
+        WHERE CONTRACT_NUMBER = #{contractNumber}
+          AND BILLING_MONTH = #{billingMonth}
+        ORDER BY SEQ_NO
+    </select>
+
+</mapper>

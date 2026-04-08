@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.billing.hotbill.api.enums.HotbillStatusTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-03-10T07:10:19.774Z" hostname="SKAXui-MacBookPro.local" time="0.002">
+  <properties/>
+  <testcase name="모든_상태값이_존재해야_한다()" classname="com.billing.hotbill.api.enums.HotbillStatusTest" time="0.0"/>
+  <testcase name="각_상태값은_설명을_가져야_한다()" classname="com.billing.hotbill.api.enums.HotbillStatusTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

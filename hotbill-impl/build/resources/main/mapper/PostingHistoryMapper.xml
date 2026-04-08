@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.billing.hotbill.impl.mapper.PostingHistoryMapper">
+
+    <resultMap id="PostingHistoryResultMap" type="com.billing.hotbill.impl.entity.PostingHistoryEntity">
+        <id property="contractNumber" column="CONTRACT_NUMBER"/>
+        <id property="hotbillDate" column="HOTBILL_DATE"/>
+        <id property="seqNo" column="SEQ_NO"/>
+        <result property="postingData" column="POSTING_DATA"/>
+        <result property="createDatetime" column="CREATE_DATETIME"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.billing.hotbill.impl.entity.PostingHistoryEntity">
+        INSERT INTO TB_POSTING_HISTORY (
+            CONTRACT_NUMBER,
+            HOTBILL_DATE,
+            SEQ_NO,
+            POSTING_DATA,
+            CREATE_DATETIME
+        ) VALUES (
+            #{contractNumber},
+            #{hotbillDate},
+            #{seqNo},
+            #{postingData},
+            #{createDatetime}
+        )
+    </insert>
+
+    <select id="selectByContracts" resultMap="PostingHistoryResultMap">
+        SELECT CONTRACT_NUMBER,
+               HOTBILL_DATE,
+               SEQ_NO,
+               POSTING_DATA,
+               CREATE_DATETIME
+        FROM TB_POSTING_HISTORY
+        WHERE HOTBILL_DATE = #{hotbillDate}
+          AND CONTRACT_NUMBER IN
+        <foreach collection="contractNumbers" item="contractNumber" open="(" separator="," close=")">
+            #{contractNumber}
+        </foreach>
+        ORDER BY CONTRACT_NUMBER, SEQ_NO
+    </select>
+
+</mapper>

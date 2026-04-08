@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.billing.hotbill.impl.mapper.ChargeDataMapper">
+
+    <resultMap id="ChargeDataResultMap" type="com.billing.hotbill.impl.entity.ChargeDataEntity">
+        <id property="contractNumber" column="CONTRACT_NUMBER"/>
+        <id property="hotbillDate" column="HOTBILL_DATE"/>
+        <id property="chargeCode" column="CHARGE_CODE"/>
+        <result property="amount" column="AMOUNT"/>
+        <result property="errorCode" column="ERROR_CODE"/>
+        <result property="errorMessage" column="ERROR_MESSAGE"/>
+        <result property="createDatetime" column="CREATE_DATETIME"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.billing.hotbill.impl.entity.ChargeDataEntity">
+        INSERT INTO TB_CHARGE_DATA (
+            CONTRACT_NUMBER,
+            HOTBILL_DATE,
+            CHARGE_CODE,
+            AMOUNT,
+            ERROR_CODE,
+            ERROR_MESSAGE,
+            CREATE_DATETIME
+        ) VALUES (
+            #{contractNumber},
+            #{hotbillDate},
+            #{chargeCode},
+            #{amount},
+            #{errorCode},
+            #{errorMessage},
+            #{createDatetime}
+        )
+    </insert>
+
+    <delete id="deleteByContractNumber">
+        DELETE FROM TB_CHARGE_DATA
+        WHERE CONTRACT_NUMBER = #{contractNumber}
+          AND HOTBILL_DATE = #{hotbillDate}
+    </delete>
+
+    <select id="selectByContractNumber" resultMap="ChargeDataResultMap">
+        SELECT CONTRACT_NUMBER,
+               HOTBILL_DATE,
+               CHARGE_CODE,
+               AMOUNT,
+               ERROR_CODE,
+               ERROR_MESSAGE,
+               CREATE_DATETIME
+        FROM TB_CHARGE_DATA
+        WHERE CONTRACT_NUMBER = #{contractNumber}
+          AND HOTBILL_DATE = #{hotbillDate}
+        ORDER BY CHARGE_CODE
+    </select>
+
+</mapper>

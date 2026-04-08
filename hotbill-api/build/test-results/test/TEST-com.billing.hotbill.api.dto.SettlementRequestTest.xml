@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.billing.hotbill.api.dto.SettlementRequestTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-03-10T07:10:19.764Z" hostname="SKAXui-MacBookPro.local" time="0.004">
+  <properties/>
+  <testcase name="계약번호_리스트가_null이면_예외발생()" classname="com.billing.hotbill.api.dto.SettlementRequestTest" time="0.001"/>
+  <testcase name="계약번호_리스트가_비어있으면_예외발생()" classname="com.billing.hotbill.api.dto.SettlementRequestTest" time="0.001"/>
+  <testcase name="해지정산요청_객체생성_테스트()" classname="com.billing.hotbill.api.dto.SettlementRequestTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

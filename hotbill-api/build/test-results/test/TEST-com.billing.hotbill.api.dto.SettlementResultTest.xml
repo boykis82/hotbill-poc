@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.billing.hotbill.api.dto.SettlementResultTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-03-10T07:10:19.769Z" hostname="SKAXui-MacBookPro.local" time="0.002">
+  <properties/>
+  <testcase name="해지정산결과_객체생성_테스트()" classname="com.billing.hotbill.api.dto.SettlementResultTest" time="0.0"/>
+  <testcase name="success_정적메서드_테스트()" classname="com.billing.hotbill.api.dto.SettlementResultTest" time="0.001"/>
+  <testcase name="isSuccess_메서드_테스트()" classname="com.billing.hotbill.api.dto.SettlementResultTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

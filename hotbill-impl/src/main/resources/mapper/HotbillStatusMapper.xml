@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.billing.hotbill.impl.mapper.HotbillStatusMapper">
+
+    <resultMap id="HotbillStatusResultMap" type="com.billing.hotbill.impl.entity.HotbillStatusEntity">
+        <id property="contractNumber" column="CONTRACT_NUMBER"/>
+        <result property="hotbillDate" column="HOTBILL_DATE"/>
+        <result property="usecase" column="USECASE" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="status" column="STATUS" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="requestDatetime" column="REQUEST_DATETIME"/>
+        <result property="updateDatetime" column="UPDATE_DATETIME"/>
+        <result property="errorMessage" column="ERROR_MESSAGE"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.billing.hotbill.impl.entity.HotbillStatusEntity">
+        INSERT INTO TB_HOTBILL_STATUS (
+            CONTRACT_NUMBER,
+            HOTBILL_DATE,
+            USECASE,
+            STATUS,
+            REQUEST_DATETIME,
+            UPDATE_DATETIME,
+            ERROR_MESSAGE
+        ) VALUES (
+            #{contractNumber},
+            #{hotbillDate},
+            #{usecase, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            #{status, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            #{requestDatetime},
+            #{updateDatetime},
+            #{errorMessage}
+        )
+    </insert>
+
+    <update id="updateStatus">
+        UPDATE TB_HOTBILL_STATUS
+        SET STATUS = #{status, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            UPDATE_DATETIME = CURRENT_TIMESTAMP
+        WHERE CONTRACT_NUMBER = #{contractNumber}
+          AND HOTBILL_DATE = #{hotbillDate}
+    </update>
+
+    <update id="updateStatusBatch">
+        UPDATE TB_HOTBILL_STATUS
+        SET STATUS = #{status, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+            UPDATE_DATETIME = CURRENT_TIMESTAMP
+        WHERE HOTBILL_DATE = #{hotbillDate}
+          AND CONTRACT_NUMBER IN
+        <foreach collection="contractNumbers" item="contractNumber" open="(" separator="," close=")">
+            #{contractNumber}
+        </foreach>
+    </update>
+
+    <select id="selectByContractNumber" resultMap="HotbillStatusResultMap">
+        SELECT CONTRACT_NUMBER,
+               HOTBILL_DATE,
+               USECASE,
+               STATUS,
+               REQUEST_DATETIME,
+               UPDATE_DATETIME,
+               ERROR_MESSAGE
+        FROM TB_HOTBILL_STATUS
+        WHERE CONTRACT_NUMBER = #{contractNumber}
+          AND HOTBILL_DATE = #{hotbillDate}
+    </select>
+
+    <select id="findNotCompletedContracts" resultType="string">
+        SELECT CONTRACT_NUMBER
+        FROM TB_HOTBILL_STATUS
+        WHERE HOTBILL_DATE = #{hotbillDate}
+          AND STATUS != 'COMPLETED'
+          AND CONTRACT_NUMBER IN
+        <foreach collection="contractNumbers" item="contractNumber" open="(" separator="," close=")">
+            #{contractNumber}
+        </foreach>
+    </select>
+
+    <select id="findNotSettledContracts" resultType="string">
+        SELECT CONTRACT_NUMBER
+        FROM TB_HOTBILL_STATUS
+        WHERE HOTBILL_DATE = #{hotbillDate}
+          AND STATUS != 'SETTLEMENT_COMPLETED'
+          AND CONTRACT_NUMBER IN
+        <foreach collection="contractNumbers" item="contractNumber" open="(" separator="," close=")">
+            #{contractNumber}
+        </foreach>
+    </select>
+
+</mapper>

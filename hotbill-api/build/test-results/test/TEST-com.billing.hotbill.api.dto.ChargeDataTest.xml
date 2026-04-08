@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.billing.hotbill.api.dto.ChargeDataTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-03-10T07:10:19.733Z" hostname="SKAXui-MacBookPro.local" time="0.005">
+  <properties/>
+  <testcase name="오류코드가_있으면_hasError가_true를_반환()" classname="com.billing.hotbill.api.dto.ChargeDataTest" time="0.002"/>
+  <testcase name="과금자료_객체생성_테스트()" classname="com.billing.hotbill.api.dto.ChargeDataTest" time="0.001"/>
+  <testcase name="오류코드가_null이면_hasError가_false를_반환()" classname="com.billing.hotbill.api.dto.ChargeDataTest" time="0.001"/>
+  <testcase name="오류코드가_빈문자열이면_hasError가_false를_반환()" classname="com.billing.hotbill.api.dto.ChargeDataTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
